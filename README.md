@@ -26,13 +26,6 @@ The app needs Accessibility permission to simulate input events.
 
 ## Release
 
-This repo includes a GitHub Actions workflow at `.github/workflows/release.yml` that builds a Release app bundle, packages it as a DMG, and attaches it to a GitHub Release when you push a tag such as `v0.1.0`.
-
-```bash
-git tag v0.1.0
-git push origin v0.1.0
-```
-
 The workflow uses `scripts/create_dmg.sh` and only depends on tools already available on GitHub's macOS runners.
 
 Current caveat: the produced app and DMG are not signed or notarized yet, so macOS Gatekeeper will treat them as unsigned downloads until signing and notarization are added.
