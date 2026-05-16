@@ -1,0 +1,55 @@
+name: Release Drift
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: macos-14
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+
+      - name: Build release app
+        run: |
+          xcodebuild \
+            -project Drift.xcodeproj \
+            -scheme Drift \
+            -configuration Release \
+            -destination 'platform=macOS' \
+            -derivedDataPath .build/DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Create DMG
+        id: package
+        run: |
+          chmod +x scripts/create_dmg.sh
+          VERSION="${GITHUB_REF_NAME#v}"
+          DMG_PATH="$(scripts/create_dmg.sh \
+            .build/DerivedData/Build/Products/Release/Drift.app \
+            .build/dist \
+            "Drift-${VERSION}")"
+          echo "dmg_path=$DMG_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: drift-dmg-${{ github.ref_name }}
+          path: ${{ steps.package.outputs.dmg_path }}
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.package.outputs.dmg_path }}
+          generate_release_notes: true
+
