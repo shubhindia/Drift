@@ -1,0 +1,6 @@
+# build dir
+.build/
+
+# xcode data
+*.xcuserstate
+xcuserdata/
