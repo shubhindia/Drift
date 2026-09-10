@@ -24,6 +24,15 @@ Open `Drift.xcodeproj` in Xcode 26 or newer and run the `Drift` target on macOS 
 
 The app needs Accessibility permission to simulate input events.
 
+To build the unsigned Release app and local DMG from the command line:
+
+```sh
+scripts/build_local_dmg.sh
+```
+
+The DMG is written to `build/dist/Drift-local.dmg`. Pass a custom DMG name as
+the first argument, for example `scripts/build_local_dmg.sh Drift-test`.
+
 ## Release
 
 The workflow uses `scripts/create_dmg.sh` and only depends on tools already available on GitHub's macOS runners.

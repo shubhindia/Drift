@@ -26,7 +26,7 @@ jobs:
             -scheme Drift \
             -configuration Release \
             -destination 'platform=macOS' \
-            -derivedDataPath .build/DerivedData \
+            -derivedDataPath build/DerivedData \
             CODE_SIGNING_ALLOWED=NO \
             build
 
@@ -36,8 +36,8 @@ jobs:
           chmod +x scripts/create_dmg.sh
           VERSION="${GITHUB_REF_NAME#v}"
           DMG_PATH="$(scripts/create_dmg.sh \
-            .build/DerivedData/Build/Products/Release/Drift.app \
-            .build/dist \
+            build/DerivedData/Build/Products/Release/Drift.app \
+            build/dist \
             "Drift-${VERSION}")"
           echo "dmg_path=$DMG_PATH" >> "$GITHUB_OUTPUT"
 
@@ -52,4 +52,3 @@ jobs:
         with:
           files: ${{ steps.package.outputs.dmg_path }}
           generate_release_notes: true
-

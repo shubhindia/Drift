@@ -1,6 +1,9 @@
 # build dir
-.build/
+build/
 
 # xcode data
 *.xcuserstate
 xcuserdata/
+
+# macos
+.DS_Store
